@@ -1,20 +1,28 @@
 import grpc
-
+from base_grpc_service import BaseGRpc
 # import the generated classes
-from protos import calculator_pb2
-from protos import calculator_pb2_grpc
+from protos import calculator_pb2, calculator_pb2_grpc
 
-# open a gRPC channel
-channel = grpc.insecure_channel('localhost:50051')
 
-# create a stub (client)
-stub = calculator_pb2_grpc.CalculatorStub(channel)
+class CalculatorClientClass(BaseGRpc):
 
-# create a valid request message
-number = calculator_pb2.Number(value=16)
+    def __init__(self):
+        # open a gRPC channel
+        self._channel = self.get_insecure_channel('localhost', '50051')
+        # create a stub (client)
+        self.stub = calculator_pb2_grpc.CalculatorStub(self._channel)
 
-# make the call
-response = stub.SquareRoot(number)
+    def get_square_root(self, number: float) -> float:
+        # create a valid request message
+        number_request_message = calculator_pb2.Number(value=number)
+
+        # make the call
+        response = self.stub.SquareRoot(number_request_message)
+        return response.value
+
+number = input('A que numero le quieres sacar la raiz cuadrada?? \n')
+
+response_value = CalculatorClientClass().get_square_root(int(number))
 
 # Se hizo la luz!
-print(response.value)
+print(response_value)
