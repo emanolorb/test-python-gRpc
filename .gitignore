@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Files proto results
+
+protos/calculator_pb2_grpc.py
+protos/calculator_pb2.py
